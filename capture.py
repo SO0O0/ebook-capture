@@ -4,6 +4,7 @@ import time
 
 import img2pdf
 import pyautogui
+from natsort import natsorted
 from PIL import Image
 
 
@@ -32,20 +33,23 @@ def capture(foldername):
 def convert(foldername):
     # get file list
     files = os.listdir(foldername)
+    # sort file list
+    files = natsorted(files)
+    print(files)
     # set extension
     ext = ".png"
     # convert
     with open(PDFNAME,"wb") as f:
-        f.write(img2pdf.convert([Image.open(foldername + "/" + j).filename for j in os.listdir(foldername)if j.endswith(ext)]))
+        f.write(img2pdf.convert([Image.open(foldername + "/" + file).filename for file in files if file.endswith(ext)]))
 
 if __name__ == "__main__":
     # number of pages
     PAGES = int(input("Enter number of pages: "))
     # interval (sec)
     SPAN = 1
-    # Initials of output folder
+    # initials of output folder
     FOLDERNAME = "output"
-    # Initials of output file
+    # initials of output file
     FILENAME = "capture"
     # get current time
     now = datetime.datetime.now()
